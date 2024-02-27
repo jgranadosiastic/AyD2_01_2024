@@ -7,6 +7,7 @@ package com.jgranados.crud.services.driver;
 import com.jgranados.crud.dto.drivers.DriverResponseDTO;
 import com.jgranados.crud.dto.drivers.NewDriverRequestDTO;
 import com.jgranados.crud.entities.drivers.Driver;
+import com.jgranados.crud.exceptions.NotFoundException;
 import java.util.List;
 
 /**
@@ -18,4 +19,6 @@ public interface DriverService {
     DriverResponseDTO createDriver(NewDriverRequestDTO newDriver);
     
     List<DriverResponseDTO> findAll();
+    
+    void deleteDriver(Long id) throws NotFoundException;
 }
