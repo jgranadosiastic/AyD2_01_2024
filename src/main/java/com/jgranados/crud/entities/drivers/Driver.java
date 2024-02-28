@@ -15,7 +15,7 @@ import lombok.Setter;
  *
  * @author jose
  */
-@Entity(name = "driver")
+@Entity(name = "Driver")
 @Getter
 @Setter
 @NoArgsConstructor

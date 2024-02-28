@@ -8,12 +8,12 @@ package com.jgranados.crud.exceptions;
  *
  * @author jose
  */
-public class NotFoundException extends ServiceException {
+public class ServiceException extends Exception {
 
-    public NotFoundException() {
+    public ServiceException() {
     }
 
-    public NotFoundException(String message) {
+    public ServiceException(String message) {
         super(message);
     }
     

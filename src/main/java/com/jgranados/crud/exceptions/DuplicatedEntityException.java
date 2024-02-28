@@ -8,12 +8,12 @@ package com.jgranados.crud.exceptions;
  *
  * @author jose
  */
-public class NotFoundException extends ServiceException {
+public class DuplicatedEntityException extends ServiceException {
 
-    public NotFoundException() {
+    public DuplicatedEntityException() {
     }
 
-    public NotFoundException(String message) {
+    public DuplicatedEntityException(String message) {
         super(message);
     }
     
