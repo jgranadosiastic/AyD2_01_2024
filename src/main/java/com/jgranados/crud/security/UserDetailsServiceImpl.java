@@ -4,8 +4,8 @@
  */
 package com.jgranados.crud.security;
 
-import com.jgranados.crud.entities.drivers.User;
-import com.jgranados.crud.services.users.UserService;
+import com.jgranados.crud.entities.users.User;
+import com.jgranados.crud.repositories.UserRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,19 +20,20 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    private UserService userService;
+    private UserRepository userRepository;
 
     @Autowired
-    public UserDetailsServiceImpl(UserService userService) {
-        this.userService = userService;
+    public UserDetailsServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
     
     
     
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<User> userOpt = userService.findByUsername(username);
+        Optional<User> userOpt = userRepository.findById(username);
         if (userOpt.isPresent()) {
+            // TODO reimplement using a custom userDetails class with authorities
             UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
                     .username(userOpt.get().getUsername())
                     .password(userOpt.get().getPassword())

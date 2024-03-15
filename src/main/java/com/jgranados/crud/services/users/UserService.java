@@ -4,7 +4,8 @@
  */
 package com.jgranados.crud.services.users;
 
-import com.jgranados.crud.entities.drivers.User;
+import com.jgranados.crud.dto.users.NewUserRequestDTO;
+import com.jgranados.crud.entities.users.User;
 import java.util.Optional;
 
 /**
@@ -14,4 +15,6 @@ import java.util.Optional;
 public interface UserService {
     
     Optional<User> findByUsername(String username);
+    
+    void createUser(NewUserRequestDTO newUser);
 }
