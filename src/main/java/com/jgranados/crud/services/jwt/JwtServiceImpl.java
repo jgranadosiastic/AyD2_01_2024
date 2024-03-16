@@ -5,6 +5,7 @@
 package com.jgranados.crud.services.jwt;
 
 import com.jgranados.crud.enums.users.Role;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -12,6 +13,7 @@ import io.jsonwebtoken.security.Keys;
 import java.security.Key;
 import java.util.Collections;
 import java.util.Date;
+import javax.crypto.SecretKey;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,7 +28,7 @@ public class JwtServiceImpl implements JwtService {
     @Override
     public String generateToken(String username) {
         return Jwts.builder()
-                .claims(Collections.singletonMap("1", Role.ADMIN))
+                .claims(Collections.singletonMap("role", Role.ADMIN))
                 .subject(username)
                 .expiration(new Date(System.currentTimeMillis() + 900000))
                 .issuedAt(new Date(System.currentTimeMillis()))
@@ -34,7 +36,29 @@ public class JwtServiceImpl implements JwtService {
                 .compact();                 
     }
 
-    private Key getSecretKey() {
+    @Override
+    public String getUsername(String token) {
+        Claims claims = extractClaims(token);
+        
+        return claims.getSubject();        
+    }
+    
+    @Override
+    public boolean isValid(String token) {
+        Claims claims = extractClaims(token);
+        Date expirationDate = claims.getExpiration();
+        
+        return new Date().before(expirationDate);
+    }
+    
+    private Claims extractClaims(String token) {
+        return Jwts.parser()
+                .verifyWith(getSecretKey())
+                .build()
+                .parseSignedClaims(token)
+                .getPayload();
+    }
+    private SecretKey getSecretKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_PHASE);
         return Keys.hmacShaKeyFor(keyBytes);
     }
