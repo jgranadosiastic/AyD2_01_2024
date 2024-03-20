@@ -5,6 +5,7 @@
 package com.jgranados.crud.security.jwtfilter;
 
 import com.jgranados.crud.services.jwt.JwtService;
+import com.jgranados.crud.services.users.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +14,6 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -55,10 +55,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        if (jwtService.isValid(token)) {
+        if (!jwtService.isTokenExpired(username)) {
             UsernamePasswordAuthenticationToken authData
                     = new UsernamePasswordAuthenticationToken(userDetails.getUsername(), null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authData);
+            jwtService.updateTokenExpiration(username);
         }
 
         filterChain.doFilter(request, response);

@@ -4,13 +4,15 @@
  */
 package com.jgranados.crud.controller.users;
 
-import com.jgranados.crud.dto.drivers.DriverResponseDTO;
-import com.jgranados.crud.dto.drivers.NewDriverRequestDTO;
 import com.jgranados.crud.dto.users.NewUserRequestDTO;
+import com.jgranados.crud.dto.users.UserResponseDTO;
 import com.jgranados.crud.services.users.UserService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +31,13 @@ public class UsersController {
     @Autowired
     public UsersController(UserService userService) {
         this.userService = userService;
+    }
+    
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
+        return ResponseEntity
+                .ok(userService.findAllUsers());
     }
     
     @PostMapping
