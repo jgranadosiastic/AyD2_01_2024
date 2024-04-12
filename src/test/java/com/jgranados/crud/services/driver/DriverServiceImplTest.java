@@ -74,6 +74,5 @@ public class DriverServiceImplTest {
         Assertions.assertThrows(NotFoundException.class,
                 () -> serviceToTest.updateDriver(DRIVER_ID, dataToUpdate)
         );
-
     }
 }
